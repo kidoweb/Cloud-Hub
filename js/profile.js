@@ -10,6 +10,7 @@ import {
   query,
   where,
   orderBy,
+  Timestamp, // Импортируем Timestamp для проверки
 } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
 import { updatePassword, EmailAuthProvider, reauthenticateWithCredential } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
@@ -72,9 +73,21 @@ async function loadOrderHistory(userId) {
       const order = doc.data();
       const orderElement = document.createElement('div');
       orderElement.classList.add('order-item');
+
+      // Проверка типа для timestamp
+      let orderDate;
+      if (order.timestamp instanceof Timestamp) {
+        orderDate = order.timestamp.toDate().toLocaleString();
+      } else if (order.timestamp && order.timestamp.seconds) {
+        // Если timestamp - это объект с полем seconds
+        orderDate = new Date(order.timestamp.seconds * 1000).toLocaleString();
+      } else {
+        orderDate = 'Не указано';
+      }
+
       orderElement.innerHTML = `
         <h4>Заказ №${doc.id}</h4>
-        <p>Дата заказа: ${order.timestamp.toDate().toLocaleString()}</p>
+        <p>Дата заказа: ${orderDate}</p>
         <p>Сумма заказа: ${order.finalPrice.toFixed(2)} ₽</p>
         <p>Скидка: ${order.discount}%</p>
         <p>Статус оплаты: ${order.paymentMethod === 'card' ? 'Оплачено' : 'Оплата при доставке'}</p>
