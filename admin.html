@@ -1,0 +1,87 @@
+<!-- admin.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cloud Hub - Админ-панель</title>
+  <link rel="stylesheet" href="styles/style.css">
+  <script type="module" src="js/firebase-config.js"></script>
+  <script type="module" src="js/auth.js"></script>
+  <script type="module" src="js/admin.js" defer></script>
+  <script src="js/theme.js" defer></script>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1><a href="index.html">☁️ Cloud <span>Hub</span></a></h1>
+      <nav>
+        <ul>
+          <li><a href="index.html">🏠 Главная</a></li>
+          <li><a href="cart.html">🛒 Корзина (<span id="cart-count">0</span>)</a></li>
+          <li><a href="profile.html" id="profile-link">👤 Профиль</a></li>
+        </ul>
+      </nav>
+      <button id="theme-toggle" class="btn">🌙 Тёмная тема</button>
+    </div>
+  </header>
+
+  <!-- admin.html -->
+<main>
+  <div class="container">
+    <h2>Панель администратора 🛠️</h2>
+    
+    <!-- Добавление нового производителя -->
+    <section class="add-manufacturer-section">
+      <h3>Добавить нового производителя</h3>
+      <form id="add-manufacturer-form">
+        <input type="text" name="manufacturer" placeholder="Название производителя" required>
+        <button type="submit">➕ Добавить производителя</button>
+      </form>
+    </section>
+
+    <!-- Список производителей -->
+    <section class="manufacturer-list-section">
+      <h3>Список производителей</h3>
+      <ul id="manufacturer-list">
+        <!-- Производители будут отображаться здесь -->
+      </ul>
+    </section>
+
+    <section class="add-product-section">
+      <h3>Добавить новый товар</h3>
+      <form id="add-product-form">
+        <input type="text" name="manufacturer" placeholder="Производитель" required>
+        <input type="text" name="name" placeholder="Название" required>
+        <textarea name="description" placeholder="Описание" required></textarea>
+        <input type="number" name="price" placeholder="Цена" required min="0" step="0.01">
+        <input type="url" name="imageUrl" placeholder="URL изображения" required>
+        <select name="category" required>
+          <option value="">Выберите категорию</option>
+          <option value="вейп">🚬 Вейп</option>
+          <option value="жидкости">💧 Жидкости</option>
+          <option value="расходники">🛠️ Расходники</option>
+        </select>
+        <button type="submit">➕ Добавить товар</button>
+      </form>
+    </section>
+    
+    <section class="products-section">
+      <h3>Список товаров</h3>
+      <div id="products-list">
+        <!-- Товары будут динамически загружены здесь -->
+      </div>
+    </section>
+  </div>
+</main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-info">
+        <p>© 2024 Cloud Hub. Все права защищены.</p>
+        <p>Свяжитесь с нами: <a href="mailto:info@cloudhub.com">📧 info@cloudhub.com</a></p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

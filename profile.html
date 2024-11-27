@@ -1,0 +1,68 @@
+<!-- profile.html -->
+<!-- Path: profile.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cloud Hub - Профиль</title>
+  <link rel="stylesheet" href="styles/style.css">
+  <script type="module" src="js/firebase-config.js"></script>
+  <script type="module" src="js/auth.js"></script>
+  <script type="module" src="js/profile.js" defer></script>
+  <script src="js/theme.js" defer></script>
+
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1><a href="index.html">☁️ Cloud <span>Hub</span></a></h1>
+      <nav>
+        <ul>
+          <li><a href="index.html">🏠 Главная</a></li>
+          <li><a href="cart.html">🛒 Корзина (<span id="cart-count">0</span>)</a></li>
+          <li><a href="login.html" id="profile-link">🔑 Вход/Регистрация</a></li>
+        </ul>
+      </nav>
+      <a href="admin.html" id="admin-panel-link" style="display: none;">Админ-панель</a>
+      <div id="admin-icon" class="admin-icon" style="display: none;">🛠️</div>
+      <button id="theme-toggle" class="btn">🌙 Тёмная тема</button>
+    </div>
+  </header>
+  
+
+  <main>
+    <div class="container">
+      <section class="profile">
+        <h2>👤 Мой профиль</h2>
+        <div id="profile-info">
+          <p><strong>Имя:</strong> <span id="user-name">Загрузка...</span></p>
+          <p><strong>Адрес доставки:</strong> <span id="user-address">Загрузка...</span></p>
+          <p><strong>Контактный номер:</strong> <span id="user-phone">Загрузка...</span></p>
+          <p><strong>Email:</strong> <span id="user-email">Загрузка...</span></p>
+          <button id="edit-profile-btn" class="btn">✏️ Изменить данные</button>
+          <button id="change-password-btn" class="btn">🔒 Сменить пароль</button>
+          <button id="logout-btn" class="btn">🚪 Выйти</button>
+        </div>
+
+        <section id="order-history">
+          <h3>📦 История заказов</h3>
+          <!-- Order history will be loaded here -->
+        </section>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-info">
+        <p>© 2024 Cloud Hub. Все права защищены.</p>
+        <p>Свяжитесь с нами: <a href="mailto:info@cloudhub.com">📧 info@cloudhub.com</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Admin Icon -->
+  <div id="admin-icon" class="admin-icon" style="display: none;">🛠️</div>
+</body>
+</html>

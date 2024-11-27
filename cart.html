@@ -1,0 +1,191 @@
+<!-- cart.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cloud Hub - Корзина</title>
+  <link rel="stylesheet" href="styles/style.css">
+  <script type="module" src="js/firebase-config.js"></script>
+  <script type="module" src="js/auth.js"></script>
+  <script type="module" src="js/cart.js" defer></script>
+  <script src="js/theme.js" defer></script>
+  <style>
+    /* Пример стилей для уведомлений */
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 25px;
+      background-color: #f0f0f0;
+      border-left: 5px solid #ccc;
+      display: none;
+      z-index: 1000;
+    }
+    .notification.success {
+      border-color: green;
+      background-color: #d4edda;
+      color: #155724;
+    }
+    .notification.error {
+      border-color: red;
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+    
+    /* Стили для контейнера промокода */
+    .promo-code-container {
+      display: flex;
+      align-items: center;
+      margin-top: 20px;
+      max-width: 400px;
+    }
+
+    /* Поле ввода промокода */
+    .promo-code-container input#promo-code {
+      flex: 1;
+      padding: 10px 15px;
+      font-size: 16px;
+      border: 2px solid #ccc;
+      border-radius: 4px 0 0 4px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .promo-code-container input#promo-code:focus {
+      border-color: #3498db;
+    }
+
+    /* Кнопка "Применить" */
+    .promo-code-container button#apply-promo.btn {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: 2px solid #3498db;
+      background-color: #3498db;
+      color: #fff;
+      cursor: pointer;
+      border-radius: 0 4px 4px 0;
+      transition: background-color 0.3s, border-color 0.3s;
+    }
+
+    .promo-code-container button#apply-promo.btn:hover {
+      background-color: #2980b9;
+      border-color: #2980b9;
+    }
+
+    /* Адаптивность: На малых экранах промокод будет располагаться вертикально */
+    @media (max-width: 500px) {
+      .promo-code-container {
+        flex-direction: column;
+        align-items: stretch;
+        max-width: 100%;
+      }
+
+      .promo-code-container input#promo-code,
+      .promo-code-container button#apply-promo.btn {
+        border-radius: 4px;
+      }
+
+      .promo-code-container input#promo-code {
+        margin-bottom: 10px;
+        border-radius: 4px;
+      }
+
+      .promo-code-container button#apply-promo.btn {
+        border-radius: 4px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1><a href="index.html">☁️ Cloud <span>Hub</span></a></h1>
+      <nav>
+        <ul>
+          <li><a href="index.html">🏠 Главная</a></li>
+          <li><a href="cart.html">🛒 Корзина (<span id="cart-count">0</span>)</a></li>
+          <li><a href="login.html" id="profile-link">🔑 Вход/Регистрация</a></li>
+        </ul>
+      </nav>
+      <a href="admin.html" id="admin-panel-link" style="display: none;">Админ-панель</a>
+      <div id="admin-icon" class="admin-icon" style="display: none;">🛠️</div>
+      <button id="theme-toggle" class="btn">🌙 Тёмная тема</button>
+    </div>
+  </header>
+
+  <section class="cart">
+    <h2>🛍️ Ваша корзина</h2>
+    <div class="container">
+      <!-- Форма доставки -->
+      <div class="delivery-form" id="delivery-form" style="display: none;">
+        <h3>🚚 Способ доставки и оплаты</h3>
+        <form id="order-form">
+          <div>
+            <label for="delivery-method">📦 Способ доставки:</label>
+            <select id="delivery-method" name="delivery-method" required>
+              <option value="standard">🕒 Стандартная доставка</option>
+              <option value="express">⚡ Экспресс-доставка</option>
+              <option value="pickup">🏬 Самовывоз с ПВЗ</option>
+              <option value="other">📍 Другой адрес</option>
+            </select>
+          </div>
+          <div>
+            <label>💳 Способ оплаты:</label>
+            <div>
+              <input type="radio" id="payment-cash" name="payment-method" value="cash" checked>
+              <label for="payment-cash">Наличными</label>
+            </div>
+            <div>
+              <input type="radio" id="payment-card" name="payment-method" value="card">
+              <label for="payment-card">Картой</label>
+            </div>
+          </div>
+          <button type="submit" class="btn">✅ Подтвердить заказ</button>
+        </form>
+      </div>
+
+      <
+
+      <!-- Корзина -->
+      <table border="0.3">
+        <thead>
+          <tr>
+            <th>📷 Изображение</th>
+            <th>Название</th>
+            <th>💰 Цена</th>
+            <th>🔢 Количество</th>
+            <th>🧮 Итого</th>
+            <th>🗑️ Действия</th>
+          </tr>
+        </thead>
+        <tbody id="cart-items">
+          <!-- Список товаров в корзине -->
+        </tbody>
+      </table>
+
+      <!-- Общая сумма -->
+      <div class="summary">
+        <p>💲 Общая сумма: <strong id="total-price">0 р.</strong></p>
+        <p>💵 Скидка: <strong id="discount">0 р.</strong></p>
+        <p>💳 Итоговая сумма: <strong id="final-price">0 р.</strong></p>
+        <button id="checkout-button" class="btn">✅ Оформить заказ</button>
+        <input type="text" id="promo-code" placeholder="Введите промокод">
+        <button id="apply-promo" class="btn">Применить</button>
+      </div>
+
+      <!-- Уведомления -->
+      <div id="notification" class="notification"></div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-info">
+        <p>© 2024 Cloud Hub. Все права защищены.</p>
+        <p>Свяжитесь с нами: <a href="mailto:info@cloudhub.com">📧 info@cloudhub.com</a></p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
